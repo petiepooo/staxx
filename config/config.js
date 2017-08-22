@@ -132,8 +132,8 @@ module.exports = {
             key: "minimumConfidence",
             name: "Minimum Confidence Level",
             description: "The minimum confidence level required for indicators to be displayed",
-            default: 0,
-            type: "number",
+            default: '0',
+            type: "text",
             userCanEdit: true,
             adminOnly: false
         },
