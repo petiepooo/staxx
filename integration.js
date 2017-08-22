@@ -40,7 +40,7 @@ function createEntityGroups(entities, options, cb) {
         if((entity.isPrivateIP || IGNORED_IPS.has(entity.value)) && options.ignorePrivateIps){
             return;
         }else{
-            entityGroup.push("value CONTAINS '" + entity.value + "'");
+            entityGroup.push(entity.value);
             entityLookup[entity.value.toLowerCase()] = entity;
         }
     });
