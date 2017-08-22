@@ -20,7 +20,7 @@ const IGNORED_IPS = new Set([
 ]);
 
 const SEVERITY_LEVELS = ['low', 'medium', 'high', 'very-high'];
-const SEVERITY_LEVELS_QUERY_FORMAT = ["severity='low'", "severity='medium'", "severity='high'", "severity='very-high'"];
+const SEVERITY_LEVELS_QUERY_SIMPLE = ["", " AND severity!='low'", " AND severity CONTAINS 'high'", " AND severity='very-high'"];
 const ERROR_EXPIRED_SESSION = 'expired_session_error';
 const MAX_ENTITIES_PER_LOOKUP = 10;
 
@@ -69,8 +69,7 @@ function _doLookup(entityGroups, entityLookup, options, cb) {
             // we are already authenticated.
             Logger.trace({numSession: sessionManager.getNumSessions()}, 'Session Already Exists');
 
-            options.severityQueryString = SEVERITY_LEVELS_QUERY_FORMAT.slice(SEVERITY_LEVELS.indexOf(options.minimumSeverity))
-                .join(" OR " );
+            options.severityQueryString = SEVERITY_LEVELS_QUERY_SIMPLE[SEVERITY_LEVELS.indexOf(options.minimumSeverity)];
 
             _lookupWithSessionToken(entityGroups, entityLookup, options, sessionToken, function(err, results){
                 if(err && err === ERROR_EXPIRED_SESSION){
@@ -206,7 +205,7 @@ function _lookupEntity(entitiesArray, entityLookup, apiToken, options, done) {
     requestOptions.body = {
         token: apiToken,
         query: "(" + entitiesArray.join(" OR ") + ") AND confidence >= " +
-            options.minimumConfidence + " AND (" + options.severityQueryString + ")",
+            options.minimumConfidence + options.severityQueryString,
         type: "json",
         size: MAX_ENTITIES_PER_LOOKUP
     };
