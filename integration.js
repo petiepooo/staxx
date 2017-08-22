@@ -20,7 +20,7 @@ const IGNORED_IPS = new Set([
 ]);
 
 const SEVERITY_LEVELS = ['low', 'medium', 'high', 'very-high'];
-const SEVERITY_LEVELS_QUERY_FORMAT = ['severity = low', 'severity = medium', 'severity = high', 'severity = very-high'];
+const SEVERITY_LEVELS_QUERY_FORMAT = ["severity='low'", "severity='medium'", "severity='high'", "severity='very-high'"];
 const ERROR_EXPIRED_SESSION = 'expired_session_error';
 const MAX_ENTITIES_PER_LOOKUP = 10;
 
@@ -40,7 +40,7 @@ function createEntityGroups(entities, options, cb) {
         if((entity.isPrivateIP || IGNORED_IPS.has(entity.value)) && options.ignorePrivateIps){
             return;
         }else{
-            entityGroup.push("value='" + entity.value + "'");
+            entityGroup.push("indicator CONTAINS '" + entity.value + "'");
             entityLookup[entity.value.toLowerCase()] = entity;
         }
     });
